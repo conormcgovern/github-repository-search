@@ -16,5 +16,6 @@ module.exports = {
   plugins: ['react', 'testing-library'],
   rules: {
     'react/prop-types': 0,
+    'react/no-children-prop': 0,
   },
 };
