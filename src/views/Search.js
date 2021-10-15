@@ -22,22 +22,33 @@ function Search() {
 
   const location = useLocation();
   const urlSearchParams = new URLSearchParams(location.search);
-  const query = urlSearchParams.get('q');
+  const query = urlSearchParams.get('q') || '';
+  const sort = urlSearchParams.get('sort') || '';
 
   const history = useHistory();
 
-  const { data } = useQuery(['repos', query], () => getRepos(query), {
-    enabled: !!query, // only fetch the data if there is a query
-  });
+  const { data } = useQuery(
+    ['repos', query, sort],
+    () => getRepos(query, sort),
+    {
+      enabled: !!query, // only fetch the data if there is a query
+    }
+  );
 
-  const handleSubmit = (query) => {
-    history.push(`search?q=${query}`);
+  const handleSearchSubmit = (searchTerm) => {
+    urlSearchParams.set('q', searchTerm);
+    history.push(`search?${urlSearchParams}`);
+  };
+
+  const handleSortSelect = (sortValue) => {
+    urlSearchParams.set('sort', sortValue);
+    history.push(`search?${urlSearchParams}`);
   };
 
   return (
     <>
       <Grid item xs={12}>
-        <SearchWidget value={query} handleSubmit={handleSubmit} />
+        <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
       {isExtraSmallWidth && (
         <>
@@ -57,7 +68,7 @@ function Search() {
               <InputLabel sx={{ minWidth: '80px' }}>Sort</InputLabel>
             </Grid>
             <Grid item flexGrow={1}>
-              <SortSelect />
+              <SortSelect value={sort} onChange={handleSortSelect} />
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -75,7 +86,11 @@ function Search() {
               <ResultsHeader query={query} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
-              <SortSelect renderValue={(value) => `Sort: ${value}`} />
+              <SortSelect
+                label="Sort: "
+                value={sort}
+                onChange={handleSortSelect}
+              />
             </Grid>
             <Grid item xs={12}>
               {data && <Results items={data.items} />}

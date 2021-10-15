@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import { MenuItem, FormControl, Select } from '@mui/material';
 
-function SortSelect({ renderValue }) {
-  const [sort, setSort] = useState('Best Match');
+const options = [
+  { value: 'best-match', display: 'Best Match' },
+  { value: 'stars', display: 'Most Stars' },
+];
+
+function SortSelect({ value, onChange, label = '' }) {
+  const getOption = (value) => {
+    return options.find((option) => option.value === value) || options[0]; // 'Best Match' is the default
+  };
+
+  const [selectedOption, setSelectedOption] = useState(getOption(value));
 
   const handleChange = (event) => {
-    setSort(event.target.value);
+    const option = getOption(event.target.value);
+    setSelectedOption(option);
+    onChange(option.value);
   };
 
   return (
@@ -13,12 +24,15 @@ function SortSelect({ renderValue }) {
       <Select
         labelId="sort-select-label"
         id="sort-select"
-        value={sort}
+        value={selectedOption.value}
         onChange={handleChange}
-        renderValue={renderValue}
+        renderValue={() => `${label}${selectedOption.display}`}
       >
-        <MenuItem value="Best Match">Best Match</MenuItem>
-        <MenuItem value="Stars">Stars</MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.display}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
