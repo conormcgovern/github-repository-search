@@ -10,4 +10,4 @@ function getRepos() {
   });
 }
 
-export default { getRepos: getRepos };
+export { getRepos };

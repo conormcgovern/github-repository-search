@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from 'react-query';
-import getRepos from '../api/api';
+import { getRepos } from '../api/api';
 import SearchWidget from '../components/SearchWidget';
 import SortSelect from '../components/SortSelect';
 import LanguageSelect from '../components/LanguageSelect';
@@ -19,10 +19,11 @@ function Search() {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.only('xs'));
 
-  const { data } = useQuery('repos', getRepos);
+  const { data, refetch } = useQuery('repos', getRepos, { enabled: false });
 
   const handleSubmit = (searchTerm) => {
     console.log(searchTerm);
+    refetch();
   };
 
   return (
