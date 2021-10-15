@@ -2,15 +2,7 @@ import React from 'react';
 import { Paper, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 
-const options = [
-  { value: 'javascript', display: 'JavaScript' },
-  { value: 'typescript', display: 'TypeScript' },
-  { value: 'html', display: 'HTML' },
-  { value: 'css', display: 'CSS' },
-  { value: 'java', display: 'Java' },
-];
-
-function LanguageMenu() {
+function LanguageMenu({ languages }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   searchParams.delete('language');
@@ -22,13 +14,13 @@ function LanguageMenu() {
           <ListItemText primary="Languages"></ListItemText>
         </ListItem>
         <Divider />
-        {options.map((option) => (
-          <ListItem key={option.value}>
+        {languages.map((language) => (
+          <ListItem key={language}>
             <Link
-              to={`search?${searchParams}&language=${option.value}`}
+              to={`search?${searchParams}&language=${language}`}
               style={{ textDecoration: 'none' }}
             >
-              <ListItemText secondary={option.display}></ListItemText>
+              <ListItemText secondary={language}></ListItemText>
             </Link>
           </ListItem>
         ))}
