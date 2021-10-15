@@ -24,7 +24,10 @@ function LanguageMenu() {
         <Divider />
         {options.map((option) => (
           <ListItem key={option.value}>
-            <Link to={`search?${searchParams}&language=${option.value}`}>
+            <Link
+              to={`search?${searchParams}&language=${option.value}`}
+              style={{ textDecoration: 'none' }}
+            >
               <ListItemText secondary={option.display}></ListItemText>
             </Link>
           </ListItem>
