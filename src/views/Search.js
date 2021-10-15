@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
+import { useQuery } from 'react-query';
+import getRepos from '../api/api';
 import SearchWidget from '../components/SearchWidget';
 import SortSelect from '../components/SortSelect';
 import LanguageSelect from '../components/LanguageSelect';
@@ -17,6 +18,8 @@ function ResultsHeader() {
 function Search() {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.only('xs'));
+
+  const { data } = useQuery('repos', getRepos);
 
   const handleSubmit = (searchTerm) => {
     console.log(searchTerm);
@@ -49,7 +52,7 @@ function Search() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Results />
+            {data && <Results items={data.items} />}
           </Grid>
         </>
       )}
@@ -66,7 +69,7 @@ function Search() {
               <SortSelect renderValue={(value) => `Sort: ${value}`} />
             </Grid>
             <Grid item xs={12}>
-              <Results />
+              {data && <Results items={data.items} />}
             </Grid>
           </Grid>
         </>
