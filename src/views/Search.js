@@ -36,7 +36,25 @@ function Search() {
     }
   );
 
+  // this query is used to build the set of languages for the filter
+  const { data: unfilteredData } = useQuery(
+    ['repos', query, sort],
+    () => getRepos(query, sort),
+    {
+      enabled: !!query,
+    }
+  );
+
+  const languages = [
+    ...new Set(
+      unfilteredData?.items
+        .map((item) => item.language)
+        .filter((item) => !!item)
+    ),
+  ];
+
   const handleSearchSubmit = (searchTerm) => {
+    urlSearchParams.delete('language');
     urlSearchParams.set('q', searchTerm);
     history.push(`search?${urlSearchParams}`);
   };
@@ -56,7 +74,7 @@ function Search() {
       <Grid item xs={12}>
         <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
-      {isExtraSmallWidth && (
+      {query && isExtraSmallWidth && (
         <>
           <Grid item xs={12}>
             <ResultsHeader query={query} />
@@ -85,10 +103,10 @@ function Search() {
           </Grid>
         </>
       )}
-      {!isExtraSmallWidth && (
+      {query && !isExtraSmallWidth && (
         <>
           <Grid item xs={3}>
-            <LanguageMenu />
+            <LanguageMenu languages={languages} />
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
