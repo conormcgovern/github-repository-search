@@ -17,10 +17,15 @@ function ResultsHeader() {
 function Search() {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.only('xs'));
+
+  const handleSubmit = (searchTerm) => {
+    console.log(searchTerm);
+  };
+
   return (
     <>
       <Grid item xs={12}>
-        <SearchWidget />
+        <SearchWidget handleSubmit={handleSubmit} />
       </Grid>
       {isExtraSmallWidth && (
         <>
