@@ -16,7 +16,7 @@ function LanguageMenu() {
   searchParams.delete('language');
 
   return (
-    <Paper elevation={0} sx={{ height: '100%', border: '1px solid #DDDDDD' }}>
+    <Paper elevation={0} sx={{ border: '1px solid #DDDDDD' }}>
       <List>
         <ListItem>
           <ListItemText primary="Languages"></ListItemText>
