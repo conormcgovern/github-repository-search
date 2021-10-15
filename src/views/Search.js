@@ -46,6 +46,11 @@ function Search() {
     history.push(`search?${urlSearchParams}`);
   };
 
+  const handleLanguageSelect = (languageValue) => {
+    urlSearchParams.set('language', languageValue);
+    history.push(`search?${urlSearchParams}`);
+  };
+
   return (
     <>
       <Grid item xs={12}>
@@ -61,7 +66,10 @@ function Search() {
               <InputLabel sx={{ minWidth: '80px' }}>Language</InputLabel>
             </Grid>
             <Grid item flexGrow={1}>
-              <LanguageSelect />
+              <LanguageSelect
+                value={language}
+                onChange={handleLanguageSelect}
+              />
             </Grid>
           </Grid>
           <Grid item container spacing={2} alignItems="center">
