@@ -24,12 +24,13 @@ function Search() {
   const urlSearchParams = new URLSearchParams(location.search);
   const query = urlSearchParams.get('q') || '';
   const sort = urlSearchParams.get('sort') || '';
+  const language = urlSearchParams.get('language') || '';
 
   const history = useHistory();
 
   const { data } = useQuery(
-    ['repos', query, sort],
-    () => getRepos(query, sort),
+    ['repos', query, sort, language],
+    () => getRepos(query, sort, language),
     {
       enabled: !!query, // only fetch the data if there is a query
     }
