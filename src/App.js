@@ -7,7 +7,12 @@ import {
   Grid,
   CssBaseline,
 } from '@mui/material';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import RespositoryDetails from './views/RepositoryDetails';
 import Search from './views/Search';
@@ -28,6 +33,9 @@ function App() {
           <Grid container spacing={2} sx={{ paddingTop: '2rem' }}>
             <Switch>
               <Route exact path="/">
+                <Redirect to="/search" />
+              </Route>
+              <Route path="/search">
                 <Search />
               </Route>
               <Route path="/:ownerLogin/:repoName">

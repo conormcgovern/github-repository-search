@@ -8,10 +8,11 @@ import SortSelect from '../components/SortSelect';
 import LanguageSelect from '../components/LanguageSelect';
 import LanguageMenu from '../components/LanguageMenu';
 import Results from '../components/Results';
+import { useHistory, useLocation } from 'react-router';
 
-function ResultsHeader() {
+function ResultsHeader({ query }) {
   return (
-    <Typography variant="h6">Results for &quot;react query&quot;</Typography>
+    query && <Typography variant="h6">{`Results for "${query}"`}</Typography>
   );
 }
 
@@ -19,22 +20,29 @@ function Search() {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.only('xs'));
 
-  const { data, refetch } = useQuery('repos', getRepos, { enabled: false });
+  const location = useLocation();
+  const urlSearchParams = new URLSearchParams(location.search);
+  const query = urlSearchParams.get('q');
 
-  const handleSubmit = (searchTerm) => {
-    console.log(searchTerm);
-    refetch();
+  const history = useHistory();
+
+  const { data } = useQuery(['repos', query], () => getRepos(query), {
+    enabled: !!query, // only fetch the data if there is a query
+  });
+
+  const handleSubmit = (query) => {
+    history.push(`search?q=${query}`);
   };
 
   return (
     <>
       <Grid item xs={12}>
-        <SearchWidget handleSubmit={handleSubmit} />
+        <SearchWidget value={query} handleSubmit={handleSubmit} />
       </Grid>
       {isExtraSmallWidth && (
         <>
           <Grid item xs={12}>
-            <ResultsHeader />
+            <ResultsHeader query={query} />
           </Grid>
           <Grid item container spacing={2} alignItems="center">
             <Grid item>
@@ -64,7 +72,7 @@ function Search() {
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
-              <ResultsHeader />
+              <ResultsHeader query={query} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
               <SortSelect renderValue={(value) => `Sort: ${value}`} />
