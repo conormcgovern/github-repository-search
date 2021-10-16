@@ -87,6 +87,7 @@ function Search() {
               <LanguageSelect
                 value={language}
                 onChange={handleLanguageSelect}
+                languages={languages}
               />
             </Grid>
           </Grid>

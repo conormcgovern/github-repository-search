@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import { MenuItem, FormControl, Select } from '@mui/material';
 
-const options = [
-  { value: 'javascript', display: 'JavaScript' },
-  { value: 'typescript', display: 'TypeScript' },
-  { value: 'html', display: 'HTML' },
-  { value: 'css', display: 'CSS' },
-  { value: 'java', display: 'Java' },
-];
-
-function LanguageSelect({ value, onChange }) {
-  const getOption = (value) => {
-    return options.find((option) => option.value === value) || options[0]; // 'JavaScript is the default
-  };
-  const [language, setLanguage] = useState(getOption(value));
+function LanguageSelect({ value, onChange, languages }) {
+  const [language, setLanguage] = useState(
+    languages.includes(value) ? value : 'any'
+  );
 
   const handleChange = (event) => {
-    const option = getOption(event.target.value);
-    setLanguage(option);
-    onChange(option.value);
+    const value = event.target.value;
+    setLanguage(value);
+    onChange(value);
   };
 
   return (
@@ -26,12 +17,13 @@ function LanguageSelect({ value, onChange }) {
       <Select
         labelId="language-select-label"
         id="language-select"
-        value={language.value}
+        value={language}
         onChange={handleChange}
       >
-        {options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.display}
+        <MenuItem value="any">Any</MenuItem>
+        {languages.map((language) => (
+          <MenuItem key={language} value={language}>
+            {language}
           </MenuItem>
         ))}
       </Select>
