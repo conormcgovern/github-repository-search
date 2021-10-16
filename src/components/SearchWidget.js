@@ -33,7 +33,7 @@ function SearchWidget({ value, handleSubmit }) {
       </IconButton>
       <InputBase
         sx={{ padding: '3px 0 4px', minWidth: '100%' }}
-        placeholder="Search"
+        placeholder="Search GitHub Repositories"
         value={searchTerm}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
