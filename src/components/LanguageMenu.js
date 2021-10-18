@@ -1,11 +1,29 @@
 import React from 'react';
-import { Paper, List, ListItem, ListItemText, Divider } from '@mui/material';
+import {
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Grid,
+  IconButton,
+} from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import CloseIcon from '@mui/icons-material/Close';
 
-function LanguageMenu({ languages }) {
+function LanguageMenu({ languages, selectedLanguage }) {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  searchParams.delete('language');
+
+  const getLinkDestination = (language) => {
+    const searchParams = new URLSearchParams(location.search);
+    if (language === selectedLanguage) {
+      // clicking on the currently selected language should remove the filter
+      searchParams.delete('language');
+    } else {
+      searchParams.set('language', language);
+    }
+    return `${location.pathname}?${searchParams}`;
+  };
 
   return (
     <Paper elevation={0} sx={{ border: '1px solid #DDDDDD' }}>
@@ -15,17 +33,36 @@ function LanguageMenu({ languages }) {
         </ListItem>
         <Divider />
         {languages.map((language) => (
-          <ListItem key={language}>
-            <Link
-              to={`search?${searchParams}&language=${language}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <ListItemText secondary={language}></ListItemText>
-            </Link>
-          </ListItem>
+          <LanguageMenuItem
+            key={language}
+            selected={language.toLowerCase() === selectedLanguage.toLowerCase()}
+            text={language}
+            linkTo={getLinkDestination(language)}
+          />
         ))}
       </List>
     </Paper>
+  );
+}
+
+function LanguageMenuItem({ selected, text, linkTo }) {
+  return (
+    <Link to={linkTo} style={{ textDecoration: 'none' }}>
+      <ListItem key={text} selected={selected}>
+        <Grid container alignItems="center">
+          <Grid item>
+            <ListItemText secondary={text}></ListItemText>
+          </Grid>
+          {selected && (
+            <Grid item sx={{ marginLeft: 'auto' }}>
+              <IconButton size="small">
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+          )}
+        </Grid>
+      </ListItem>
+    </Link>
   );
 }
 

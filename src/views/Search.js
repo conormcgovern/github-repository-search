@@ -107,7 +107,7 @@ function Search() {
       {query && !isExtraSmallWidth && (
         <>
           <Grid item xs={3}>
-            <LanguageMenu languages={languages} />
+            <LanguageMenu languages={languages} selectedLanguage={language} />
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
