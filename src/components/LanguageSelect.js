@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MenuItem, FormControl, Select } from '@mui/material';
 
 function LanguageSelect({ value, onChange, languages }) {
-  const [language, setLanguage] = useState(
-    languages.includes(value) ? value : 'any'
-  );
+  const language = languages.includes(value) ? value : 'any';
 
   const handleChange = (event) => {
     const value = event.target.value;
-    setLanguage(value);
     onChange(value);
   };
 
