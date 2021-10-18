@@ -1,5 +1,12 @@
 import React from 'react';
-import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
+import {
+  Grid,
+  InputLabel,
+  LinearProgress,
+  Typography,
+  useMediaQuery,
+  Box,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from 'react-query';
 import { getRepos } from '../api/api';
@@ -28,11 +35,12 @@ function Search() {
 
   const history = useHistory();
 
-  const { data } = useQuery(
+  const { data, isFetching } = useQuery(
     ['repos', query, sort, language],
     () => getRepos(query, sort, language),
     {
       enabled: !!query, // only fetch the data if there is a query
+      keepPreviousData: true,
     }
   );
 
@@ -42,6 +50,7 @@ function Search() {
     () => getRepos(query, sort),
     {
       enabled: !!query,
+      keepPreviousData: true,
     }
   );
 
@@ -71,6 +80,11 @@ function Search() {
 
   return (
     <>
+      {isFetching && (
+        <Box sx={{ width: '100%', top: 0, position: 'absolute' }}>
+          <LinearProgress />
+        </Box>
+      )}
       <Grid item xs={12}>
         <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
@@ -111,7 +125,7 @@ function Search() {
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
-              <ResultsHeader query={query} />
+              <ResultsHeader query={query} data={data} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
               <SortSelect
