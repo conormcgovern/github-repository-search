@@ -7,4 +7,10 @@ async function getRepos(query, sort, language) {
   return data;
 }
 
-export { getRepos };
+async function getRepo(ownerLogin, repoName) {
+  const url = `https://api.github.com/repos/${ownerLogin}/${repoName}`;
+  const { data } = await axios.get(url);
+  return data;
+}
+
+export { getRepos, getRepo };

@@ -4,60 +4,77 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import CodeIcon from '@mui/icons-material/Code';
 import { useParams } from 'react-router';
+import { useQuery } from 'react-query';
+import { getRepo } from '../api/api';
 
-const iconStyle = { verticalAlign: 'sub', marginRight: '.2rem' };
+const iconStyle = {
+  verticalAlign: 'sub',
+  marginRight: '.2rem',
+};
 
 function RespositoryDetails() {
   const { ownerLogin, repoName } = useParams();
-  console.log(ownerLogin, repoName);
+
+  const { data } = useQuery(['repoDetails', ownerLogin, repoName], () =>
+    getRepo(ownerLogin, repoName)
+  );
+
+  const formatCount = (count) => {
+    if (count >= 1000) {
+      return Number.parseFloat(count / 1000).toPrecision(3) + 'k';
+    }
+    return count;
+  };
 
   return (
     <Grid container item justifyContent="center">
-      <Grid item xs={10} s={8}>
-        <Card variant="outlined">
-          <CardContent>
-            <Grid container item sm={10} spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h6">
-                  tannerlinsley<span> </span>
-                  <Box
-                    component="span"
-                    sx={{ display: 'inline-block', fontWeight: 'bold' }}
-                  >
-                    / react-query
-                  </Box>
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" gutterBottom>
-                  ⚛️ Hooks for fetching, caching and updating asynchronous data
-                  in React
-                </Typography>
-              </Grid>
-              <Grid
-                container
-                item
-                spacing={2}
-                justifyContent="space-between"
-                flexWrap="nowrap"
-              >
-                <Grid item>
-                  <CodeIcon fontSize="small" sx={iconStyle} />
-                  TypeScript
+      {data && (
+        <Grid item xs={11} s={8}>
+          <Card variant="outlined">
+            <CardContent>
+              <Grid container item sm={10} spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">
+                    {ownerLogin}
+                    <span> </span>
+                    <Box
+                      component="span"
+                      sx={{ display: 'inline-block', fontWeight: 'bold' }}
+                    >
+                      / {repoName}
+                    </Box>
+                  </Typography>
                 </Grid>
-                <Grid item>
-                  <StarOutlineIcon fontSize="small" sx={iconStyle} />
-                  23.2k
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {data.description}
+                  </Typography>
                 </Grid>
-                <Grid item>
-                  <AltRouteIcon fontSize="small" sx={iconStyle} />
-                  1.2k
+                <Grid container item justifyContent="space-between">
+                  <Grid item>
+                    <Typography>
+                      <CodeIcon fontSize="small" sx={iconStyle} />
+                      {data.language}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography>
+                      <StarOutlineIcon fontSize="small" sx={iconStyle} />
+                      {formatCount(data.stargazers_count)}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography>
+                      <AltRouteIcon fontSize="small" sx={iconStyle} />
+                      {formatCount(data.forks_count)}
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
     </Grid>
   );
 }
