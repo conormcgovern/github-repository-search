@@ -41,6 +41,7 @@ function Search() {
     {
       enabled: !!query, // only fetch the data if there is a query
       keepPreviousData: true,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -51,6 +52,7 @@ function Search() {
     {
       enabled: !!query,
       keepPreviousData: true,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -70,11 +72,6 @@ function Search() {
 
   const handleSortSelect = (sortValue) => {
     urlSearchParams.set('sort', sortValue);
-    history.push(`search?${urlSearchParams}`);
-  };
-
-  const handleLanguageSelect = (languageValue) => {
-    urlSearchParams.set('language', languageValue);
     history.push(`search?${urlSearchParams}`);
   };
 
@@ -98,11 +95,7 @@ function Search() {
               <InputLabel sx={{ minWidth: '80px' }}>Language</InputLabel>
             </Grid>
             <Grid item flexGrow={1}>
-              <LanguageSelect
-                value={language}
-                onChange={handleLanguageSelect}
-                languages={languages}
-              />
+              <LanguageSelect value={language} languages={languages} />
             </Grid>
           </Grid>
           <Grid item container spacing={2} alignItems="center">
