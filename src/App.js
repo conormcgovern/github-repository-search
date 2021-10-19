@@ -16,6 +16,7 @@ import {
 import { QueryClient, QueryClientProvider } from 'react-query';
 import RespositoryDetails from './views/RepositoryDetails';
 import Search from './views/Search';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,8 @@ function App() {
         <CssBaseline />
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6">GitHub Repository Search</Typography>
+            <GitHubIcon fontSize="large" sx={{ marginRight: '1rem' }} />
+            <Typography variant="h6">Repository Search</Typography>
           </Toolbar>
         </AppBar>
         <Container>
