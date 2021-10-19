@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MenuItem, FormControl, Select } from '@mui/material';
+import { Link, useLocation } from 'react-router-dom';
 
-const options = [
-  { value: 'best-match', display: 'Best Match' },
+const sortOptions = [
+  { value: 'best match', display: 'Best Match' },
   { value: 'stars', display: 'Most Stars' },
 ];
 
-function SortSelect({ value, onChange, label = '' }) {
-  const getOption = (value) => {
-    return options.find((option) => option.value === value) || options[0]; // 'Best Match' is the default
-  };
+function SortSelect({ value, label = '' }) {
+  const selectedOption =
+    sortOptions.find((option) => option.value === value) || sortOptions[0]; // 'Best Match' is the default
+  const location = useLocation();
 
-  const [selectedOption, setSelectedOption] = useState(getOption(value));
-
-  const handleChange = (event) => {
-    const option = getOption(event.target.value);
-    setSelectedOption(option);
-    onChange(option.value);
+  const getLinkDestination = (sort) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('sort', sort);
+    return `${location.pathname}?${searchParams}`;
   };
 
   return (
@@ -25,12 +24,16 @@ function SortSelect({ value, onChange, label = '' }) {
         labelId="sort-select-label"
         id="sort-select"
         value={selectedOption.value}
-        onChange={handleChange}
         renderValue={() => `${label}${selectedOption.display}`}
       >
-        {options.map((option) => (
+        {sortOptions.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            {option.display}
+            <Link
+              to={getLinkDestination(option.value)}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              {option.display}
+            </Link>
           </MenuItem>
         ))}
       </Select>

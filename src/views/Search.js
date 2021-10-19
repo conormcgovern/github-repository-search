@@ -70,11 +70,6 @@ function Search() {
     history.push(`search?${urlSearchParams}`);
   };
 
-  const handleSortSelect = (sortValue) => {
-    urlSearchParams.set('sort', sortValue);
-    history.push(`search?${urlSearchParams}`);
-  };
-
   return (
     <>
       {isFetching && (
@@ -103,7 +98,7 @@ function Search() {
               <InputLabel sx={{ minWidth: '80px' }}>Sort</InputLabel>
             </Grid>
             <Grid item flexGrow={1}>
-              <SortSelect value={sort} onChange={handleSortSelect} />
+              <SortSelect value={sort} />
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -121,11 +116,7 @@ function Search() {
               <ResultsHeader query={query} data={data} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
-              <SortSelect
-                label="Sort: "
-                value={sort}
-                onChange={handleSortSelect}
-              />
+              <SortSelect label="Sort: " value={sort} />
             </Grid>
             <Grid item xs={12}>
               {data && <Results items={data.items} />}
