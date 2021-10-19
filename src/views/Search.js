@@ -65,9 +65,13 @@ function Search() {
   ];
 
   const handleSearchSubmit = (searchTerm) => {
-    urlSearchParams.delete('language');
-    urlSearchParams.set('q', searchTerm);
-    history.push(`search?${urlSearchParams}`);
+    if (!searchTerm.trim()) {
+      history.push('search');
+    } else {
+      urlSearchParams.delete('language');
+      urlSearchParams.set('q', searchTerm);
+      history.push(`search?${urlSearchParams}`);
+    }
   };
 
   return (

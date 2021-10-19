@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { Search } from '@mui/icons-material';
 import { IconButton, InputBase, Paper } from '@mui/material';
 
-function SearchWidget({ value, handleSubmit }) {
-  const [searchTerm, setSearchTerm] = useState(value ? value : '');
+function SearchWidget({ value = '', handleSubmit }) {
+  const [searchTerm, setSearchTerm] = useState(value);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleKeyPress = (event) => {
+    if (!searchTerm.trim()) setSearchTerm('');
     event.charCode === 13 && handleSubmit(searchTerm);
   };
 
   const handleSearchIconClick = () => {
+    if (!searchTerm.trim()) setSearchTerm('');
     handleSubmit(searchTerm);
   };
 
