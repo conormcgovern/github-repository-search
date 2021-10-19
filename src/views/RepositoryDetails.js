@@ -6,6 +6,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import { useParams } from 'react-router';
 import { useQuery } from 'react-query';
 import { getRepo } from '../api/api';
+import LinearProgressBar from '../components/LinearProgressBar';
 
 const iconStyle = {
   verticalAlign: 'sub',
@@ -15,8 +16,9 @@ const iconStyle = {
 function RespositoryDetails() {
   const { ownerLogin, repoName } = useParams();
 
-  const { data } = useQuery(['repoDetails', ownerLogin, repoName], () =>
-    getRepo(ownerLogin, repoName)
+  const { data, isFetching } = useQuery(
+    ['repoDetails', ownerLogin, repoName],
+    () => getRepo(ownerLogin, repoName)
   );
 
   const formatCount = (count) => {
@@ -28,6 +30,7 @@ function RespositoryDetails() {
 
   return (
     <Grid container item justifyContent="center">
+      <LinearProgressBar show={isFetching} />
       {data && (
         <Grid item xs={11} s={8}>
           <Card variant="outlined">

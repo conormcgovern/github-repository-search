@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Grid,
-  InputLabel,
-  LinearProgress,
-  Typography,
-  useMediaQuery,
-  Box,
-} from '@mui/material';
+import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from 'react-query';
 import { getRepos } from '../api/api';
@@ -15,6 +8,7 @@ import SortSelect from '../components/SortSelect';
 import LanguageSelect from '../components/LanguageSelect';
 import LanguageMenu from '../components/LanguageMenu';
 import Results from '../components/Results';
+import LinearProgressBar from '../components/LinearProgressBar';
 import { useHistory, useLocation } from 'react-router';
 
 function ResultsHeader({ query }) {
@@ -76,11 +70,7 @@ function Search() {
 
   return (
     <>
-      {isFetching && (
-        <Box sx={{ width: '100%', top: 0, position: 'absolute' }}>
-          <LinearProgress />
-        </Box>
-      )}
+      <LinearProgressBar show={isFetching} />
       <Grid item xs={12}>
         <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
