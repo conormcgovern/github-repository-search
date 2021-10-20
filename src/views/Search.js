@@ -10,12 +10,7 @@ import LanguageMenu from '../components/LanguageMenu';
 import Results from '../components/Results';
 import LinearProgressBar from '../components/LinearProgressBar';
 import { useHistory, useLocation } from 'react-router';
-
-function ResultsHeader({ query }) {
-  return (
-    query && <Typography variant="h6">{`Results for "${query}"`}</Typography>
-  );
-}
+import ResultsSummary from '../components/ResultsSummary';
 
 function Search() {
   const theme = useTheme();
@@ -85,7 +80,7 @@ function Search() {
       {data?.total_count > 0 && isExtraSmallWidth && (
         <>
           <Grid item xs={12}>
-            <ResultsHeader query={data.query} />
+            <ResultsSummary data={data} />
           </Grid>
           <Grid item container spacing={2} alignItems="center">
             <Grid item>
@@ -115,7 +110,7 @@ function Search() {
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
-              <ResultsHeader query={data.query} />
+              <ResultsSummary data={data} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
               <SortSelect label="Sort: " value={sort} />
