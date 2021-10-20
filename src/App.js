@@ -19,6 +19,7 @@ import { QueryClient, QueryClientProvider, QueryCache } from 'react-query';
 import RespositoryDetails from './views/RepositoryDetails';
 import Search from './views/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -67,10 +68,14 @@ function App() {
                 <Redirect to="/search" />
               </Route>
               <Route path="/search">
-                <Search />
+                <ErrorBoundary>
+                  <Search />
+                </ErrorBoundary>
               </Route>
               <Route path="/:ownerLogin/:repoName">
-                <RespositoryDetails />
+                <ErrorBoundary>
+                  <RespositoryDetails />
+                </ErrorBoundary>
               </Route>
               <Route path="/">
                 <Grid container item xs={12} justifyContent={'center'}>
