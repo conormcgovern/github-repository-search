@@ -35,7 +35,7 @@ function Search() {
     {
       enabled: !!query, // only fetch the data if there is a query
       keepPreviousData: true,
-      refetchOnWindowFocus: false,
+      // ,
     }
   );
 
@@ -46,7 +46,6 @@ function Search() {
     {
       enabled: !!query,
       keepPreviousData: true,
-      refetchOnWindowFocus: false,
     }
   );
 
@@ -71,10 +70,11 @@ function Search() {
   return (
     <>
       <LinearProgressBar show={isFetching} />
+
       <Grid item xs={12}>
         <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
-      {query && isExtraSmallWidth && (
+      {query && data && isExtraSmallWidth && (
         <>
           <Grid item xs={12}>
             <ResultsHeader query={query} />
@@ -100,7 +100,7 @@ function Search() {
           </Grid>
         </>
       )}
-      {query && !isExtraSmallWidth && (
+      {query && data && !isExtraSmallWidth && (
         <>
           <Grid item xs={3}>
             <LanguageMenu languages={languages} selectedLanguage={language} />
