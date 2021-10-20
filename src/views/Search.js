@@ -29,13 +29,15 @@ function Search() {
 
   const history = useHistory();
 
-  const { data, isFetching } = useQuery(
+  const { data, isFetching, isPreviousData } = useQuery(
     ['repos', query, sort, language],
     () => getRepos(query, sort, language),
     {
       enabled: !!query, // only fetch the data if there is a query
       keepPreviousData: true,
-      // ,
+      select: (data) => {
+        return { query: query, ...data };
+      },
     }
   );
 
@@ -59,7 +61,7 @@ function Search() {
 
   const handleSearchSubmit = (searchTerm) => {
     if (!searchTerm.trim()) {
-      history.push('search');
+      history.push('/');
     } else {
       urlSearchParams.delete('language');
       urlSearchParams.set('q', searchTerm);
@@ -69,15 +71,21 @@ function Search() {
 
   return (
     <>
-      <LinearProgressBar show={isFetching} />
-
+      <LinearProgressBar show={isFetching && isPreviousData} />
       <Grid item xs={12}>
         <SearchWidget value={query} handleSubmit={handleSearchSubmit} />
       </Grid>
-      {query && data && isExtraSmallWidth && (
+      {data?.total_count === 0 && (
+        <Grid item xs={12}>
+          <Typography variant="h6">
+            No results for &quot;{data.query}&quot;.
+          </Typography>
+        </Grid>
+      )}
+      {data?.total_count > 0 && isExtraSmallWidth && (
         <>
           <Grid item xs={12}>
-            <ResultsHeader query={query} />
+            <ResultsHeader query={data.query} />
           </Grid>
           <Grid item container spacing={2} alignItems="center">
             <Grid item>
@@ -100,14 +108,14 @@ function Search() {
           </Grid>
         </>
       )}
-      {query && data && !isExtraSmallWidth && (
+      {data?.total_count > 0 && !isExtraSmallWidth && (
         <>
           <Grid item xs={3}>
             <LanguageMenu languages={languages} selectedLanguage={language} />
           </Grid>
           <Grid container item xs={9}>
             <Grid item>
-              <ResultsHeader query={query} data={data} />
+              <ResultsHeader query={data.query} />
             </Grid>
             <Grid item sx={{ marginLeft: 'auto' }}>
               <SortSelect label="Sort: " value={sort} />
