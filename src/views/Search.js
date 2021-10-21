@@ -1,16 +1,13 @@
 import React from 'react';
-import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
+import { Grid, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery, useQueryClient } from 'react-query';
 import { getRepos } from '../api/api';
 import SearchWidget from '../components/SearchWidget';
-import SortSelect from '../components/SortSelect';
-import LanguageSelect from '../components/LanguageSelect';
-import LanguageMenu from '../components/LanguageMenu';
-import Results from '../components/Results';
 import LinearProgressBar from '../components/LinearProgressBar';
 import { useHistory, useLocation } from 'react-router';
-import ResultsSummary from '../components/ResultsSummary';
+import SearchResultsMobile from './SearchResultsMobile';
+import SearchResultsDesktop from './SearchResultsDesktop';
 
 function Search() {
   const theme = useTheme();
@@ -79,48 +76,20 @@ function Search() {
         </Grid>
       )}
       {data?.total_count > 0 && isExtraSmallWidth && (
-        <>
-          <Grid item xs={12}>
-            <ResultsSummary data={data} />
-          </Grid>
-          <Grid item container spacing={2} alignItems="center">
-            <Grid item>
-              <InputLabel sx={{ minWidth: '80px' }}>Language</InputLabel>
-            </Grid>
-            <Grid item flexGrow={1}>
-              <LanguageSelect value={language} languages={languages} />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={2} alignItems="center">
-            <Grid item>
-              <InputLabel sx={{ minWidth: '80px' }}>Sort</InputLabel>
-            </Grid>
-            <Grid item flexGrow={1}>
-              <SortSelect value={sort} />
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            {data && <Results items={data.items} />}
-          </Grid>
-        </>
+        <SearchResultsMobile
+          data={data}
+          language={language}
+          languages={languages}
+          sort={sort}
+        />
       )}
       {data?.total_count > 0 && !isExtraSmallWidth && (
-        <>
-          <Grid item xs={3}>
-            <LanguageMenu languages={languages} selectedLanguage={language} />
-          </Grid>
-          <Grid container item xs={9}>
-            <Grid item>
-              <ResultsSummary data={data} />
-            </Grid>
-            <Grid item sx={{ marginLeft: 'auto' }}>
-              <SortSelect label="Sort: " value={sort} />
-            </Grid>
-            <Grid item xs={12}>
-              {data && <Results items={data.items} />}
-            </Grid>
-          </Grid>
-        </>
+        <SearchResultsDesktop
+          data={data}
+          language={language}
+          languages={languages}
+          sort={sort}
+        />
       )}
     </>
   );
