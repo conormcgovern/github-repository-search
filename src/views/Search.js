@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, InputLabel, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { getRepos } from '../api/api';
 import SearchWidget from '../components/SearchWidget';
 import SortSelect from '../components/SortSelect';
@@ -15,14 +15,13 @@ import ResultsSummary from '../components/ResultsSummary';
 function Search() {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.only('xs'));
-
+  const queryClient = useQueryClient();
+  const history = useHistory();
   const location = useLocation();
   const urlSearchParams = new URLSearchParams(location.search);
-  const query = urlSearchParams.get('q') || '';
-  const sort = urlSearchParams.get('sort') || '';
-  const language = urlSearchParams.get('language') || '';
-
-  const history = useHistory();
+  const query = urlSearchParams.get('q') ?? '';
+  const sort = urlSearchParams.get('sort') ?? '';
+  const language = urlSearchParams.get('language') ?? '';
 
   const { data, isFetching, isPreviousData } = useQuery(
     ['repos', query, sort, language],
@@ -60,6 +59,8 @@ function Search() {
     } else {
       urlSearchParams.delete('language');
       urlSearchParams.set('q', searchTerm);
+      // forces a refetch on search submit
+      queryClient.removeQueries(['repos', searchTerm]);
       history.push(`search?${urlSearchParams}`);
     }
   };
