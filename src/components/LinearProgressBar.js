@@ -5,7 +5,7 @@ function LinearProgressBar({ show = false }) {
   return (
     <>
       {show && (
-        <Box sx={{ width: '100%', top: 0, position: 'absolute' }}>
+        <Box sx={{ width: '100%', top: 0, left: 0, position: 'absolute' }}>
           <LinearProgress />
         </Box>
       )}
