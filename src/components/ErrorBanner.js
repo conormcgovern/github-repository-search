@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Alert, AlertTitle } from '@mui/material';
+import { Box, Alert, AlertTitle, Snackbar } from '@mui/material';
 
 function ErrorBanner({ open = false, error, handleClose }) {
   const renderErrorContent = (error) => {
@@ -14,14 +14,18 @@ function ErrorBanner({ open = false, error, handleClose }) {
     return <AlertTitle>Something went wrong.</AlertTitle>;
   };
 
-  if (open) {
-    return (
+  return (
+    <Snackbar
+      open={open}
+      onClose={handleClose}
+      autoHideDuration={12000}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+    >
       <Alert severity="error" onClose={handleClose}>
         {renderErrorContent(error)}
       </Alert>
-    );
-  }
-  return <></>;
+    </Snackbar>
+  );
 }
 
 export default ErrorBanner;

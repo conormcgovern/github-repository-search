@@ -22,19 +22,21 @@ import ErrorBanner from './components/ErrorBanner';
 
 function App() {
   const [error, setError] = useState();
-  const queryClient = new QueryClient({
-    queryCache: new QueryCache({
-      onError: (error) => {
-        setError(error);
+  const [queryClient] = useState(
+    new QueryClient({
+      queryCache: new QueryCache({
+        onError: (error) => {
+          setError(error);
+        },
+      }),
+      defaultOptions: {
+        queries: {
+          useErrorBoundary: (error) => error.response?.status >= 500,
+          refetchOnWindowFocus: false,
+        },
       },
-    }),
-    defaultOptions: {
-      queries: {
-        useErrorBoundary: (error) => error.response?.status >= 500,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
+    })
+  );
 
   const handleErrorClose = () => {
     setError();
